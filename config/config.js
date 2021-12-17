@@ -84,83 +84,99 @@ export default defineConfig({
         },
       ],
     },
-      {
-        path: '/dashboard',
-        name: 'dashboard',
-        icon: 'dashboard',
-        routes: [
-          {
-            path: '/dashboard',
-            redirect: '/dashboard/analysis',
-          },
-          {
-            name: 'analysis',
-            icon: 'smile',
-            path: '/dashboard/analysis',
-            component: './dashboard/analysis',
-          },
-          {
-            name: 'monitor',
-            icon: 'smile',
-            path: '/dashboard/monitor',
-            component: './dashboard/monitor',
-          },
-          {
-            name: 'workplace',
-            icon: 'smile',
-            path: '/dashboard/workplace',
-            component: './dashboard/workplace',
-          },
-        ],
-      },
-      {
-        path: '/form',
-        icon: 'form',
-        name: 'form',
-        routes: [
-          {
-            path: '/form',
-            redirect: '/form/basic-form',
-          },
-          {
-            name: 'basic-form',
-            icon: 'smile',
-            path: '/form/basic-form',
-            component: './form/basic-form',
-          },
-          {
-            name: 'step-form',
-            icon: 'smile',
-            path: '/form/step-form',
-            component: './form/step-form',
-          },
-          {
-            name: 'advanced-form',
-            icon: 'smile',
-            path: '/form/advanced-form',
-            component: './form/advanced-form',
-          },
-        ],
-      },
-      {
-        path: '/list',
-        icon: 'table',
-        name: 'list',
-        routes: [
-          {
-            path: '/list/search',
-            name: 'search-list',
-            component: './list/search',
-            routes: [
-              {
-                path: '/list/search',
-                redirect: '/list/search/articles',
-              },
-              {
-                name: 'articles',
-                icon: 'smile',
-                path: '/list/search/articles',
-                component: './list/search/articles',
+    {
+      path: '/table',
+      name: 'table',
+      icon: 'dashboard',
+      routes: [
+        {
+          path: '/table',
+          redirect: '/table/basic',
+        },
+        {
+          path: '/table/basic',
+          name: 'basic',
+          component: './Table/Basic',
+        },
+      ],
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      icon: 'dashboard',
+      routes: [
+        {
+          path: '/dashboard',
+          redirect: '/dashboard/analysis',
+        },
+        {
+          name: 'analysis',
+          icon: 'smile',
+          path: '/dashboard/analysis',
+          component: './dashboard/analysis',
+        },
+        {
+          name: 'monitor',
+          icon: 'smile',
+          path: '/dashboard/monitor',
+          component: './dashboard/monitor',
+        },
+        {
+          name: 'workplace',
+          icon: 'smile',
+          path: '/dashboard/workplace',
+          component: './dashboard/workplace',
+        },
+      ],
+    },
+    {
+      path: '/form',
+      icon: 'form',
+      name: 'form',
+      routes: [
+        {
+          path: '/form',
+          redirect: '/form/basic-form',
+        },
+        {
+          name: 'basic-form',
+          icon: 'smile',
+          path: '/form/basic-form',
+          component: './form/basic-form',
+        },
+        {
+          name: 'step-form',
+          icon: 'smile',
+          path: '/form/step-form',
+          component: './form/step-form',
+        },
+        {
+          name: 'advanced-form',
+          icon: 'smile',
+          path: '/form/advanced-form',
+          component: './form/advanced-form',
+        },
+      ],
+    },
+    {
+      path: '/list',
+      icon: 'table',
+      name: 'list',
+      routes: [
+        {
+          path: '/list/search',
+          name: 'search-list',
+          component: './list/search',
+          routes: [
+            {
+              path: '/list/search',
+              redirect: '/list/search/articles',
+            },
+            {
+              name: 'articles',
+              icon: 'smile',
+              path: '/list/search/articles',
+              component: './list/search/articles',
             },
             {
               name: 'projects',
@@ -348,6 +364,7 @@ export default defineConfig({
   manifest: {
     basePath: '/',
   },
+  publicPath: '/',
   // Fast Refresh 热更新
   fastRefresh: {},
   openAPI: [

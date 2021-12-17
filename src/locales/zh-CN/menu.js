@@ -12,6 +12,8 @@ export default {
   'menu.drag.table': '表格',
   'menu.drag.tag': '块级拖拽',
 
+  'menu.table': '表格问题',
+  'menu.table.basic': '基础问题',
 
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.analysis': '分析页',

@@ -1,17 +1,17 @@
 import { PageContainer } from '@ant-design/pro-layout';
-import { useState, useCallback, useRef } from "react";
-import { Transfer, Card, Table, Tag, Button } from 'antd';
+import { useState, useCallback, useRef } from 'react';
+import { Transfer, Switch, Table, Tag, Button, Card } from 'antd';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
-// import DragT from './components/DragT';
+import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 
-const Index = () => {
-
+// 穿梭表格拖拽问题
+const Index = (props) => {
   const mockTags = ['cat', 'dog', 'bird'];
   const mockData = [];
-  const originTargetKeys = mockData.filter(item => +item.key % 3 > 1).map(item => item.key);
-  for (let i = 0; i < 20; i++) {
+  const originTargetKeys = mockData.filter((item) => +item.key % 3 > 1).map((item) => item.key);
+  for (let i = 0; i < 6; i++) {
     mockData.push({
       key: i.toString(),
       title: `content${i + 1}`,
@@ -20,10 +20,10 @@ const Index = () => {
       tag: mockTags[i % 3],
     });
   }
-  const [ targetKeys, setTargetKeys ] = useState(originTargetKeys)
-  const [ disabled, setDisabled ] = useState(false)
-  const [ showSearch, setShowSearch] = useState(false)
-  const [ data, setData ] = useState([])
+  const [targetKeys, setTargetKeys] = useState(originTargetKeys);
+  const [disabled, setDisabled] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [data, setData] = useState([]);
 
   const leftTableColumns = [
     {
@@ -33,7 +33,7 @@ const Index = () => {
     {
       dataIndex: 'tag',
       title: 'Tag',
-      render: tag => <Tag>{tag}</Tag>,
+      render: (tag) => <Tag>{tag}</Tag>,
     },
     {
       dataIndex: 'description',
@@ -49,36 +49,47 @@ const Index = () => {
       dataIndex: 'title',
       align: 'center',
       title: '操作',
-      render: (value, data, index) =>{
+      render: (value, data, index) => {
         return (
           <>
-            <Button type='link' onClick={(e)=>{ console.log(index)}}>上移</Button>
-            <Button type='link'>下移</Button>
+            <Button
+              type="link"
+              onClick={(e) => {
+                console.log(index);
+              }}
+            >
+              上移
+            </Button>
+            <Button type="link">下移</Button>
           </>
-        )
-      }
-    }
+        );
+      },
+    },
   ];
 
-  const onChange = nextTargetKeys => {
+  const onChange = (nextTargetKeys) => {
     setTargetKeys(nextTargetKeys);
   };
 
-  const triggerDisable = disabled => {
+  const triggerDisable = (disabled) => {
     setDisabled(disabled);
   };
 
-  const triggerShowSearch = showSearch => {
+  const triggerShowSearch = (showSearch) => {
     setShowSearch(showSearch);
   };
 
   const type = 'DraggableBodyRow';
 
   const DraggableBodyRow = ({ index, moveRow, className, style, ...restProps }) => {
+    if (document.getElementsByClassName('ant-transfer-list-body-search-wrapper').length > 0) {
+      document.getElementsByClassName('ant-transfer-list-body-search-wrapper')[1].style.display =
+        'none';
+    }
     const ref = useRef();
     const [{ isOver, dropClassName }, drop] = useDrop({
       accept: type,
-      collect: monitor => {
+      collect: (monitor) => {
         const { index: dragIndex } = monitor.getItem() || {};
         if (dragIndex === index) {
           return {};
@@ -88,14 +99,14 @@ const Index = () => {
           dropClassName: dragIndex < index ? ' drop-over-downward' : ' drop-over-upward',
         };
       },
-      drop: item => {
+      drop: (item) => {
         moveRow(item.index, index);
       },
     });
     const [, drag] = useDrag({
       type,
       item: { index },
-      collect: monitor => ({
+      collect: (monitor) => ({
         isDragging: monitor.isDragging(),
       }),
     });
@@ -128,35 +139,34 @@ const Index = () => {
           ],
         }),
       );
-      console.log('data',data)
-      console.log('dragIndex',dragIndex)
-      console.log('hoverIndex',hoverIndex)
-      console.log('dragRow',dragRow)
+      console.log('data', data);
+      console.log('dragIndex', dragIndex);
+      console.log('hoverIndex', hoverIndex);
+      console.log('dragRow', dragRow);
     },
     [data],
   );
-
 
   // Customize Table Transfer
   const TableTransfer = ({ leftColumns, rightColumns, ...restProps }) => (
     <Transfer {...restProps}>
       {({
-          direction,
-          filteredItems,
-          onItemSelectAll,
-          onItemSelect,
-          selectedKeys: listSelectedKeys,
-          disabled: listDisabled,
-        }) => {
+        direction,
+        filteredItems,
+        onItemSelectAll,
+        onItemSelect,
+        selectedKeys: listSelectedKeys,
+        disabled: listDisabled,
+      }) => {
         const columns = direction === 'left' ? leftColumns : rightColumns;
 
         const rowSelection = {
-          getCheckboxProps: item => ({ disabled: listDisabled || item.disabled }),
+          getCheckboxProps: (item) => ({ disabled: listDisabled || item.disabled }),
           onSelectAll(selected, selectedRows) {
             const treeSelectedKeys = selectedRows
-              .filter(item => !item.disabled)
+              .filter((item) => !item.disabled)
               .map(({ key }) => key);
-            const diffKeys = selected
+            const diffKeys = selected;
             //   ? difference(treeSelectedKeys, listSelectedKeys)
             //   : difference(listSelectedKeys, treeSelectedKeys);
             onItemSelectAll(diffKeys, selected);
@@ -182,7 +192,7 @@ const Index = () => {
                     if (itemDisabled || listDisabled) return;
                     onItemSelect(key, !listSelectedKeys.includes(key));
                   },
-                  moveRow
+                  moveRow,
                   // moveRow: (...restProps, filteredItems)=>{moveRow()}
                 })}
               />
@@ -193,7 +203,7 @@ const Index = () => {
     </Transfer>
   );
 
-  const DTable = () =>{
+  const DTable = () => {
     const type = 'DraggableBodyRow';
     const columns = [
       {
@@ -237,7 +247,7 @@ const Index = () => {
       const ref = useRef();
       const [{ isOver, dropClassName }, drop] = useDrop({
         accept: type,
-        collect: monitor => {
+        collect: (monitor) => {
           const { index: dragIndex } = monitor.getItem() || {};
           if (dragIndex === index) {
             return {};
@@ -247,14 +257,14 @@ const Index = () => {
             dropClassName: dragIndex < index ? ' drop-over-downward' : ' drop-over-upward',
           };
         },
-        drop: item => {
+        drop: (item) => {
           moveRow(item.index, index);
         },
       });
       const [, drag] = useDrag({
         type,
         item: { index },
-        collect: monitor => ({
+        collect: (monitor) => ({
           isDragging: monitor.isDragging(),
         }),
       });
@@ -287,10 +297,10 @@ const Index = () => {
             ],
           }),
         );
-        console.log('data',data)
-        console.log('dragIndex',dragIndex)
-        console.log('hoverIndex',hoverIndex)
-        console.log('dragRow',dragRow)
+        console.log('data', data);
+        console.log('dragIndex', dragIndex);
+        console.log('hoverIndex', hoverIndex);
+        console.log('dragRow', dragRow);
       },
       [data],
     );
@@ -308,18 +318,24 @@ const Index = () => {
         />
       </DndProvider>
     );
-  }
-
+  };
 
   return (
-    <PageContainer content="表格拖拽问题">
-      {/*<DragT />*/}
-      <Card title='穿梭框+拖拽'>
+    <PageContainer content="表格拖拽相关问题">
+      <Card
+        title="穿梭表格 + 拖拽问题"
+        type="inner"
+        actions={[
+          <SettingOutlined key="setting" />,
+          <EditOutlined key="edit" />,
+          <EllipsisOutlined key="ellipsis" />,
+        ]}
+      >
         <TableTransfer
           dataSource={mockData}
           targetKeys={targetKeys}
           disabled={disabled}
-          showSearch={showSearch}
+          showSearch={true}
           onChange={onChange}
           filterOption={(inputValue, item) =>
             item.title.indexOf(inputValue) !== -1 || item.tag.indexOf(inputValue) !== -1
@@ -327,9 +343,22 @@ const Index = () => {
           leftColumns={leftTableColumns}
           rightColumns={rightTableColumns}
         />
+        {/*<Switch*/}
+        {/*  unCheckedChildren="disabled"*/}
+        {/*  checkedChildren="disabled"*/}
+        {/*  checked={disabled}*/}
+        {/*  onChange={triggerDisable}*/}
+        {/*  style={{ marginTop: 16 }}*/}
+        {/*/>*/}
+        {/*<Switch*/}
+        {/*  unCheckedChildren="showSearch"*/}
+        {/*  checkedChildren="showSearch"*/}
+        {/*  checked={showSearch}*/}
+        {/*  onChange={triggerShowSearch}*/}
+        {/*  style={{ marginTop: 16 }}*/}
+        {/*/>*/}
       </Card>
     </PageContainer>
   );
 };
-
 export default Index;
